@@ -31,6 +31,7 @@ namespace Play_Poker.Enums
     }
     public enum HandTypes
     {
+        NoHand = 0,
         HighCard = 1,
         Pair = 2,
         TwoPairs = 3,

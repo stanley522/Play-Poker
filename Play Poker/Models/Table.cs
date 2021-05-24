@@ -8,16 +8,25 @@ namespace Play_Poker.Models
 {
     class Table
     {
-        int Pot { get; set; }
+        public int Pot { get; set; }
         int SmallBlind { get; set; }
-        int PreFlop { get; set; }
-        int Flop { get; set; }
-        int River { get; set; }
-        int Turn { get; set; }
-        List<Player> Players { get; set; }
-        void JoinGame(Player player)
+        public int BuyIn { get; set; }
+        int PreFlopBet { get; set; }
+        int FlopBet { get; set; }
+        int RiverBet { get; set; }
+        int TurnBet { get; set; }
+        public int CurrentBid { get; set; }
+        public List<Card> CommonCards { get; set; } = new List<Card>();
+        public List<Player> Players { get; set; } = new List<Player>();
+        public void JoinGame(Player player)
         {
             Players.Add(player);
+            player.BuyIn(BuyIn);
+        }
+        public void ClearPot()
+        {
+            Pot = 0;
+            CurrentBid = 0;
         }
     }
 }
