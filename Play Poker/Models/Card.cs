@@ -348,6 +348,17 @@ namespace Play_Poker.Models
             cards.Remove(card);
             hand.Add(card);
         }
+        public static void Deal(this HashSet<Card> cards, List<Card> hand, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                var random = new Random();
+                var num = random.Next() % cards.Count();
+                var card = cards.ToList()[num];
+                cards.Remove(card);
+                hand.Add(card);
+            }
+        }
         public static void DealFive(this HashSet<Card> cards, List<Card> hand)
         {
             for (int i = 0; i < 5; i++)

@@ -8,25 +8,34 @@ namespace Play_Poker.Models
 {
     class Table
     {
-        public int Pot { get; set; }
-        int SmallBlind { get; set; }
+        public Game CurrentGame { get; set; }
+        public List<Game> PastGames { get; set; }
         public int BuyIn { get; set; }
-        int PreFlopBet { get; set; }
-        int FlopBet { get; set; }
-        int RiverBet { get; set; }
-        int TurnBet { get; set; }
-        public int CurrentBid { get; set; }
-        public List<Card> CommonCards { get; set; } = new List<Card>();
+        public int SmallBlind { get; set; }
+        public int BigBlind { get; set; }
+        public int MaxPlayers { get; set; }
         public List<Player> Players { get; set; } = new List<Player>();
-        public void JoinGame(Player player)
+        public bool JoinTable(Player player)
         {
+            if (Players.Count >= MaxPlayers)
+            {
+                return false;
+            }
             Players.Add(player);
             player.BuyIn(BuyIn);
+            return true;
         }
-        public void ClearPot()
+        public bool NewGame()
         {
-            Pot = 0;
-            CurrentBid = 0;
+            if (Players.Count < 2)
+            {
+                return false;
+            }
+            var currentGame = CurrentGame;
+            PastGames.Add(currentGame);
+            CurrentGame = new Game(this);
+            return true;
         }
+
     }
 }

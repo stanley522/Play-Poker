@@ -18,118 +18,118 @@ namespace Play_Poker
             InitializeComponent();
         }
         Table Table { get; set; } = new Table();
+        Game Game { get; set; }
         HashSet<Card> Deck { get; set; }
         private void Form1_Load(object sender, EventArgs e)
         {
             Table.BuyIn = 1000;
             var playerOne = new Player("Stanley",Table.BuyIn*2);
-            Table.JoinGame(playerOne);
+            Table.JoinTable(playerOne);
             var playerTwo = new Player("Com", Table.BuyIn * 2);
-            Table.JoinGame(playerTwo);
-            Deck = Card.NewDeck();
+            Table.JoinTable(playerTwo);
             PlayerOneMoneyTextBox.Text = playerOne.MoneyOnTable.ToString();
             PlayerTwoMoneyTextBox.Text = playerTwo.MoneyOnTable.ToString();
         }
 
         private void DealPlayerOneButton_Click(object sender, EventArgs e)
         {
-            var player = Table.Players.FirstOrDefault();
+            var player = Game.Players.FirstOrDefault();
             Deck.Deal(player.Hand);
             var text = string.Empty;
             player.Hand.ForEach(c => text += $"{c.ToString()} \r\n");
             PlayerOneCardsTextBox.Text = text;
-            PlayerOneHandBox.Text = CardExtension.GetHand(player.Hand.Concat(Table.CommonCards).ToList()).ToString();
+            PlayerOneHandBox.Text = CardExtension.GetHand(player.Hand.Concat(Game.CommonCards).ToList()).ToString();
         }
 
         private void DealFivePlayerOne_Click(object sender, EventArgs e)
         {
-            var player = Table.Players.FirstOrDefault();
+            var player = Game.Players.FirstOrDefault();
             Deck.DealFive(player.Hand);
             var text = string.Empty;
             player.Hand.ForEach(c => text += $"{c.ToString()} \r\n");
             PlayerOneCardsTextBox.Text = text;
-            PlayerOneHandBox.Text = CardExtension.GetHand(player.Hand.Concat(Table.CommonCards).ToList()).ToString();
+            PlayerOneHandBox.Text = CardExtension.GetHand(player.Hand.Concat(Game.CommonCards).ToList()).ToString();
         }
 
         private void ClearPlayerOneHandButton_Click(object sender, EventArgs e)
         {
-            var player = Table.Players.FirstOrDefault();
+            var player = Game.Players.FirstOrDefault();
             player.Hand = new List<Card>();
             var text = string.Empty;
             player.Hand.ForEach(c => text += $"{c.ToString()} \r\n");
             PlayerOneCardsTextBox.Text = text;
-            PlayerOneHandBox.Text = CardExtension.GetHand(player.Hand.Concat(Table.CommonCards).ToList()).ToString();
+            PlayerOneHandBox.Text = CardExtension.GetHand(player.Hand.Concat(Game.CommonCards).ToList()).ToString();
         }
 
 
 
         private void DealPlayerTwoButton_Click(object sender, EventArgs e)
         {
-            var playerTwo = Table.Players.LastOrDefault();
+            var playerTwo = Game.Players.LastOrDefault();
             Deck.Deal(playerTwo.Hand);
             var text = string.Empty;
             playerTwo.Hand.ForEach(c => text += $"{c.ToString()} \r\n");
             PlayerTwoCardsTextBox.Text = text;
-            PlayerTwoHandBox.Text = CardExtension.GetHand(playerTwo.Hand.Concat(Table.CommonCards).ToList()).ToString();
+            PlayerTwoHandBox.Text = CardExtension.GetHand(playerTwo.Hand.Concat(Game.CommonCards).ToList()).ToString();
         }
 
         private void DealFivePlayerTwoButton_Click(object sender, EventArgs e)
         {
-            var playerTwo = Table.Players.LastOrDefault();
+            var playerTwo = Game.Players.LastOrDefault();
             Deck.DealFive(playerTwo.Hand);
             var text = string.Empty;
             playerTwo.Hand.ForEach(c => text += $"{c.ToString()} \r\n");
             PlayerTwoCardsTextBox.Text = text;
-            PlayerTwoHandBox.Text = CardExtension.GetHand(playerTwo.Hand.Concat(Table.CommonCards).ToList()).ToString();
+            PlayerTwoHandBox.Text = CardExtension.GetHand(playerTwo.Hand.Concat(Game.CommonCards).ToList()).ToString();
         }
 
         private void ClearPlayerTwoHandButton_Click(object sender, EventArgs e)
         {
-            var playerTwo = Table.Players.LastOrDefault();
+            var playerTwo = Game.Players.LastOrDefault();
             playerTwo.Hand = new List<Card>();
             var text = string.Empty;
             playerTwo.Hand.ForEach(c => text += $"{c.ToString()} \r\n");
             PlayerTwoCardsTextBox.Text = text;
-            PlayerTwoHandBox.Text = CardExtension.GetHand(playerTwo.Hand.Concat(Table.CommonCards).ToList()).ToString();
+            PlayerTwoHandBox.Text = CardExtension.GetHand(playerTwo.Hand.Concat(Game.CommonCards).ToList()).ToString();
         }
 
         private void DealCommonButton_Click(object sender, EventArgs e)
         {
-            var player = Table.Players.FirstOrDefault();
-            var playerTwo = Table.Players.LastOrDefault();
-            Deck.Deal(Table.CommonCards);
+            var player = Game.Players.FirstOrDefault();
+            var playerTwo = Game.Players.LastOrDefault();
+            Deck.Deal(Game.CommonCards);
             var text = string.Empty;
-            Table.CommonCards.ForEach(c => text += $"{c.ToString()} \r\n");
+            Game.CommonCards.ForEach(c => text += $"{c.ToString()} \r\n");
             CommonCardsTextBox.Text = text;
-            PlayerOneHandBox.Text = CardExtension.GetHand(player.Hand.Concat(Table.CommonCards).ToList()).ToString();
-            PlayerTwoHandBox.Text = CardExtension.GetHand(playerTwo.Hand.Concat(Table.CommonCards).ToList()).ToString();
+            PlayerOneHandBox.Text = CardExtension.GetHand(player.Hand.Concat(Game.CommonCards).ToList()).ToString();
+            PlayerTwoHandBox.Text = CardExtension.GetHand(playerTwo.Hand.Concat(Game.CommonCards).ToList()).ToString();
 
         }
 
         private void CompareButton_Click(object sender, EventArgs e)
         {
-            var playerOne = Table.Players.FirstOrDefault();
-            var playerTwo = Table.Players.LastOrDefault();
-            var compare = CardExtension.GetHand(playerOne.Hand.Concat(Table.CommonCards).ToList())
-                .CompareTo(CardExtension.GetHand(playerTwo.Hand.Concat(Table.CommonCards).ToList()));
+            var playerOne = Game.Players.FirstOrDefault();
+            var playerTwo = Game.Players.LastOrDefault();
+            var compare = CardExtension.GetHand(playerOne.Hand.Concat(Game.CommonCards).ToList())
+                .CompareTo(CardExtension.GetHand(playerTwo.Hand.Concat(Game.CommonCards).ToList()));
 
             WinnerTextBox.Text = compare == 1 ? $"{playerOne.Name} wins." :
                 compare == -1 ? $"{playerTwo.Name} wins." :
                 "It's a draw.";
             if (compare == 1)
             {
-                playerOne.WinPot(Table.Pot);
+                playerOne.WinPot(Game.Pot);
             }
             if (compare == -1)
             {
-                playerTwo.WinPot(Table.Pot);
+                playerTwo.WinPot(Game.Pot);
             }
             if (compare == 0)
             { 
-            playerOne.WinPot(Table.Pot/2);
-            playerTwo.WinPot(Table.Pot/2);
+            playerOne.WinPot(Game.Pot/2);
+            playerTwo.WinPot(Game.Pot/2);
         }
-            Table.Pot = 0;
+            Game.Pot = 0;
             ShowTableMoney();
             ShowPlayerMoney();
 
@@ -137,9 +137,9 @@ namespace Play_Poker
 
         private void ClearCommonCardsButton_Click(object sender, EventArgs e)
         {
-            Table.CommonCards = new List<Card>();
+            Game.CommonCards = new List<Card>();
             var text = string.Empty;
-            Table.CommonCards.ForEach(c => text += $"{c.ToString()} \r\n");
+            Game.CommonCards.ForEach(c => text += $"{c.ToString()} \r\n");
             CommonCardsTextBox.Text = text;
         }
         private void NewDeckButton_Click(object sender, EventArgs e)
@@ -149,32 +149,32 @@ namespace Play_Poker
 
         private void PlayerOneFoldButton_Click(object sender, EventArgs e)
         {
-            var playerTwo = Table.Players.LastOrDefault();
-            playerTwo.WinPot(Table.Pot);
-            Table.ClearPot();
+            var playerTwo = Game.Players.LastOrDefault();
+            playerTwo.WinPot(Game.Pot);
+            Game.ClearPot();
             ShowTableMoney();
             ShowPlayerMoney();
         }
 
         private void PlayerTwoFoldButton_Click(object sender, EventArgs e)
         {
-            var playerOne = Table.Players.FirstOrDefault();
-            playerOne.WinPot(Table.Pot);
-            Table.ClearPot();
+            var playerOne = Game.Players.FirstOrDefault();
+            playerOne.WinPot(Game.Pot);
+            Game.ClearPot();
             ShowTableMoney();
             ShowPlayerMoney();
         }
 
         private void PlayerOneCallButton_Click(object sender, EventArgs e)
         {
-            var playerOne = Table.Players.FirstOrDefault();
-            var amount = Table.CurrentBid - playerOne.Bid;
+            var playerOne = Game.Players.FirstOrDefault();
+            var amount = Game.CurrentBid - playerOne.Bid;
             playerOne.BidMoney(amount);
-            Table.Pot += amount;
-            if (Table.Players.All(p => p.Bid == Table.CurrentBid))
+            Game.Pot += amount;
+            if (Game.Players.All(p => p.Bid == Game.CurrentBid))
             {
-                Table.Players.ForEach(p => p.Bid = 0);
-                Table.CurrentBid = 0;
+                Game.Players.ForEach(p => p.Bid = 0);
+                Game.CurrentBid = 0;
             }
             ShowTableMoney();
             ShowPlayerMoney();
@@ -182,14 +182,14 @@ namespace Play_Poker
 
         private void PlayerTwoCallButton_Click(object sender, EventArgs e)
         {
-            var playerTwo = Table.Players.LastOrDefault();
-            var amount = Table.CurrentBid - playerTwo.Bid;
+            var playerTwo = Game.Players.LastOrDefault();
+            var amount = Game.CurrentBid - playerTwo.Bid;
             playerTwo.BidMoney(amount);
-            Table.Pot += amount;
-            if (Table.Players.All(p=>p.Bid == Table.CurrentBid))
+            Game.Pot += amount;
+            if (Game.Players.All(p=>p.Bid == Game.CurrentBid))
             {
-                Table.Players.ForEach(p => p.Bid = 0);
-                Table.CurrentBid = 0;
+                Game.Players.ForEach(p => p.Bid = 0);
+                Game.CurrentBid = 0;
             }
             ShowTableMoney();
             ShowPlayerMoney();
@@ -199,11 +199,11 @@ namespace Play_Poker
         {
             if (e.KeyCode == Keys.Enter)
             {
-                var playerOne = Table.Players.FirstOrDefault();
-                var amount = Table.CurrentBid + int.Parse(PlayerOneRaiseTextBox.Text) - playerOne.Bid;
+                var playerOne = Game.Players.FirstOrDefault();
+                var amount = Game.CurrentBid + int.Parse(PlayerOneRaiseTextBox.Text) - playerOne.Bid;
                 playerOne.BidMoney(amount);
-                Table.CurrentBid = playerOne.Bid;
-                Table.Pot += amount;
+                Game.CurrentBid = playerOne.Bid;
+                Game.Pot += amount;
                 ShowTableMoney();
                 ShowPlayerMoney();
             }
@@ -213,11 +213,11 @@ namespace Play_Poker
         {
             if (e.KeyCode == Keys.Enter)
             {
-                var playerTwo = Table.Players.LastOrDefault();
-                var amount = Table.CurrentBid + int.Parse(PlayerTwoRaiseTextBox.Text) - playerTwo.Bid;
+                var playerTwo = Game.Players.LastOrDefault();
+                var amount = Game.CurrentBid + int.Parse(PlayerTwoRaiseTextBox.Text) - playerTwo.Bid;
                 playerTwo.BidMoney(amount);
-                Table.CurrentBid = playerTwo.Bid;
-                Table.Pot += amount;
+                Game.CurrentBid = playerTwo.Bid;
+                Game.Pot += amount;
                 ShowTableMoney();
                 ShowPlayerMoney();
             }
@@ -230,16 +230,16 @@ namespace Play_Poker
         }
         private void ShowBid()
         {
-            BidTextBox.Text = Table.CurrentBid.ToString();
+            BidTextBox.Text = Game.CurrentBid.ToString();
         }
         private void ShowPot()
         {
-            PotTextBox.Text = Table.Pot.ToString();
+            PotTextBox.Text = Game.Pot.ToString();
         }
         private void ShowPlayerMoney()
         {
-                var playerOne = Table.Players.FirstOrDefault();
-            var playerTwo = Table.Players.LastOrDefault();
+                var playerOne = Game.Players.FirstOrDefault();
+            var playerTwo = Game.Players.LastOrDefault();
             PlayerOneMoneyTextBox.Text = playerOne.MoneyOnTable.ToString();
             PlayerTwoMoneyTextBox.Text = playerTwo.MoneyOnTable.ToString();
             PlayerOneBidTextBox.Text = playerOne.Bid.ToString();

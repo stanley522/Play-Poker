@@ -19,6 +19,7 @@ namespace Play_Poker.Models
         int TotalMoney { get => Money+MoneyOnTable; }
         public List<Card> Hand { get; set; } = new List<Card>();
         public int Bid { get; set; }
+        public Table Table { get; set; }
         public void BuyIn(int buyIn)
         {
             Money -= buyIn;
